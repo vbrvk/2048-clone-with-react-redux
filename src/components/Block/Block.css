@@ -1,0 +1,22 @@
+.game-block{
+  font-size: 2rem;
+  color: #232323;
+  font-weight: bold;
+  text-align: center;
+  border-radius: 4px;
+  cursor: default;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  display: inline-block;
+  vertical-align: middle;
+  z-index: 10000;
+  position: absolute;
+
+  transition: 200ms, ease-in-out;
+  transition-property: transform;
+}
+
+.text-align-center{
+  line-height: 3.2em;
+}
