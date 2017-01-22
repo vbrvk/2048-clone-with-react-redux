@@ -54,10 +54,12 @@ class Game extends React.Component {
 
 
     this.touchstartHandle = (event) => {
+      event.preventDefault();
       touchstartX = event.changedTouches[0].screenX;
       touchstartY = event.changedTouches[0].screenY;
     };
     this.touchendHandle = (event) => {
+      event.preventDefault();
       touchendX = event.changedTouches[0].screenX;
       touchendY = event.changedTouches[0].screenY;
       handleGesure();

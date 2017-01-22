@@ -22,7 +22,7 @@
     "react-flip-move": "^2.7.4",
     "react-motion": "^0.4.7",
     "react-redux": "^5.0.2",
-    "redux": "^3.6.0",
+    "redux": "^3.6.0"
   },
   "scripts": {
     "start": "react-scripts start",
