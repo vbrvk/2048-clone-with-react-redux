@@ -20,9 +20,9 @@ const prevState = getStoreFromLocalStorage(); // TODO enable
 let store;
 
 if (prevState) {
-  store = createStore(reducer, prevState, window.__REDUX_DEVTOOLS_EXTENSION__()); //eslint-disable-line
+  store = createStore(reducer, prevState, (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())); //eslint-disable-line
 } else {
-  store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__()); //eslint-disable-line
+  store = createStore(reducer, (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())); //eslint-disable-line
 }
 
 window.addEventListener('unload', () => {

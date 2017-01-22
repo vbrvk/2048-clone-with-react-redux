@@ -1,6 +1,5 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
 import { Alert } from '@blueprintjs/core';
 import '@blueprintjs/core/dist/blueprint.css';
 
@@ -16,16 +15,55 @@ class Game extends React.Component {
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.getSize = this.getSize.bind(this);
   }
+
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
+    this.handleSwipe();
   }
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
+    document.removeEventListener('touchstart', this.touchstartHandle);
+    document.removeEventListener('touchend', this.touchendHandle);
   }
 
   getSize(size) {
     return `${(this.props.game.blockSize * this.props.game[size]) + (this.props.game.borderWidth * (this.props.game[size] - 1))}px`;
+  }
+
+  handleSwipe() {
+    let touchstartX = 0;
+    let touchstartY = 0;
+    let touchendX = 0;
+    let touchendY = 0;
+
+    const handleGesure = () => {
+      if (touchstartX - touchendX > 20) {
+        this.props.onKeyPress.Left();
+      }
+      if (touchendX - touchstartX > 20) {
+        this.props.onKeyPress.Right();
+      }
+      if (touchstartY - touchendY > 20) {
+        this.props.onKeyPress.Up();
+      }
+      if (touchendY - touchstartY > 20) {
+        this.props.onKeyPress.Down();
+      }
+    };
+
+
+    this.touchstartHandle = (event) => {
+      touchstartX = event.changedTouches[0].screenX;
+      touchstartY = event.changedTouches[0].screenY;
+    };
+    this.touchendHandle = (event) => {
+      touchendX = event.changedTouches[0].screenX;
+      touchendY = event.changedTouches[0].screenY;
+      handleGesure();
+    };
+    document.addEventListener('touchstart', this.touchstartHandle);
+    document.addEventListener('touchend', this.touchendHandle);
   }
 
   handleKeyPress(e) {

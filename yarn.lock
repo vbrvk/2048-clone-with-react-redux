@@ -5464,6 +5464,10 @@ validate-npm-package-license@^3.0.1:
     spdx-correct "~1.0.0"
     spdx-expression-parse "~1.0.0"
 
+vanilla-touchwipe:
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/vanilla-touchwipe/-/vanilla-touchwipe-1.0.0.tgz#51e20a07313784325cb19930fc2072da39bab720"
+
 vary@~1.1.0:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/vary/-/vary-1.1.0.tgz#e1e5affbbd16ae768dd2674394b9ad3022653140"
