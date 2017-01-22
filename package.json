@@ -2,7 +2,7 @@
   "name": "2048-clone-with-react-redux",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://borovik96.github.io/2048-react-redux",
+  "homepage": "http://borovik96.github.io/2048-clone-with-react-redux",
   "devDependencies": {
     "eslint": "^3.13.1",
     "eslint-config-airbnb": "^14.0.0",
