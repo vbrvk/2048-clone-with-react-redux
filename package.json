@@ -11,9 +11,11 @@
     "react-scripts": "0.8.5"
   },
   "dependencies": {
+    "@blueprintjs/core": "^1.6.0",
     "key-mirror": "^1.0.1",
     "lodash": "^4.17.4",
     "react": "^15.4.2",
+    "react-addons-css-transition-group": "^15.4.2",
     "react-dom": "^15.4.2",
     "react-flip-move": "^2.7.4",
     "react-motion": "^0.4.7",

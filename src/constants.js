@@ -5,7 +5,24 @@ export const actionTypes = keymirror({
   PRESS_RIGHT_KEY: null,
   PRESS_UP_KEY: null,
   PRESS_DOWN_KEY: null,
+  NEW_GAME: null,
+  CONTINUE_GAME: null,
 });
+
+export const VECTORS = {
+  LEFT: {
+    x: -1, y: 0,
+  },
+  RIGHT: {
+    x: 1, y: 0,
+  },
+  UP: {
+    x: 0, y: -1,
+  },
+  DOWN: {
+    x: 0, y: 1,
+  },
+};
 
 export const KEY_CODES = {
   UP: 38,
@@ -18,7 +35,7 @@ export const KEY_CODES = {
 export const GAME_STATUS = keymirror({
   PLAY: null,
   LOSE: null,
-  WON: null,
+  WIN: null,
 });
 
-export default { actionTypes, KEY_CODES, GAME_STATUS };
+export default { actionTypes, KEY_CODES, GAME_STATUS, VECTORS };

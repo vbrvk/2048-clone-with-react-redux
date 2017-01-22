@@ -1,14 +1,20 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { KEY_CODES } from '../../constants';
+
+import { Alert } from '@blueprintjs/core';
+import '@blueprintjs/core/dist/blueprint.css';
+
+import { KEY_CODES, GAME_STATUS } from '../../constants';
 import actions from '../../actions';
 import Grid from '../Grid';
+import Header from '../Header';
 
 
 class Game extends React.Component {
   constructor() {
     super();
     this.handleKeyPress = this.handleKeyPress.bind(this);
+    this.getSize = this.getSize.bind(this);
   }
   componentDidMount() {
     document.addEventListener('keydown', this.handleKeyPress);
@@ -16,6 +22,10 @@ class Game extends React.Component {
 
   componentWillUnmount() {
     document.removeEventListener('keydown', this.handleKeyPress);
+  }
+
+  getSize(size) {
+    return `${(this.props.game.blockSize * this.props.game[size]) + (this.props.game.borderWidth * (this.props.game[size] - 1))}px`;
   }
 
   handleKeyPress(e) {
@@ -33,7 +43,44 @@ class Game extends React.Component {
     }
   }
   render() {
-    return (<Grid game={this.props.game} />);
+    const { game } = this.props;
+    const size = {
+      width: this.getSize('width'),
+      height: this.getSize('height'),
+    };
+    let alertText;
+    let alertButtonText;
+    switch (game.status) { // eslint-disable-line
+      case GAME_STATUS.WIN:
+        alertText = `You win. Score: ${game.score}`;
+        alertButtonText = 'Continue';
+        break;
+      case GAME_STATUS.LOSE:
+        alertText = `Game over. Score: ${game.score}`;
+        alertButtonText = 'Try again';
+        break;
+    }
+    return (
+      <div>
+        <Header
+          width={`${parseInt(size.width, 10) + (2 * game.borderWidth)}px`} score={game.score}
+          onClickButton={this.props.newGame}
+        />
+        <Grid
+          width={size.width}
+          height={size.height}
+          game={this.props.game}
+        />
+        <Alert
+          isOpen={game.status !== GAME_STATUS.PLAY}
+          confirmButtonText={alertButtonText}
+          onConfirm={
+            game.status === GAME_STATUS.LOSE ?
+            this.props.newGame : this.props.continueGame
+          }
+        >{alertText}</Alert>
+      </div>
+    );
   }
 }
 
@@ -44,9 +91,13 @@ Game.propTypes = {
     Left: React.PropTypes.func,
     Right: React.PropTypes.func,
   }).isRequired,
+  newGame: React.PropTypes.func.isRequired,
+  continueGame: React.PropTypes.func.isRequired,
   game: React.PropTypes.shape({
     blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     score: React.PropTypes.number.isRequired,
+    blockSize: React.PropTypes.number.isRequired,
+    borderWidth: React.PropTypes.number.isRequired,
   }).isRequired,
 };
 
@@ -66,5 +117,11 @@ export default connect(state => ({
     Right: () => {
       dispatch(actions.pressRightKey());
     },
+  },
+  newGame: () => {
+    dispatch(actions.newGame());
+  },
+  continueGame: () => {
+    dispatch(actions.continueGame());
   },
 }))(Game);

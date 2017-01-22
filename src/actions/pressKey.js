@@ -1,31 +1,23 @@
-import { actionTypes } from '../constants';
+import { actionTypes, VECTORS } from '../constants';
 
 const pressDownKey = () => ({
   type: actionTypes.PRESS_DOWN_KEY,
-  vector: {
-    x: 0, y: 1,
-  },
+  vector: VECTORS.DOWN,
 });
 
 const pressUpKey = () => ({
   type: actionTypes.PRESS_UP_KEY,
-  vector: {
-    x: 0, y: -1,
-  },
+  vector: VECTORS.UP,
 });
 
 const pressRightKey = () => ({
   type: actionTypes.PRESS_RIGHT_KEY,
-  vector: {
-    x: 1, y: 0,
-  },
+  vector: VECTORS.RIGHT,
 });
 
 const pressLeftKey = () => ({
   type: actionTypes.PRESS_LEFT_KEY,
-  vector: {
-    x: -1, y: 0,
-  },
+  vector: VECTORS.LEFT,
 });
 
 export default { pressUpKey, pressDownKey, pressRightKey, pressLeftKey };

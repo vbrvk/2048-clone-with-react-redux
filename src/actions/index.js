@@ -1,3 +1,4 @@
 import pressKey from './pressKey';
+import gameState from './gameState';
 
-export default { ...pressKey };
+export default { ...pressKey, ...gameState };

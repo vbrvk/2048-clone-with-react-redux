@@ -8,7 +8,26 @@ import reducer from './reducers';
 import App from './components/App';
 import './index.css';
 
-const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__()); //eslint-disable-line
+const getStoreFromLocalStorage = () => {
+  try {
+    return JSON.parse(localStorage.getItem('state'));
+  } catch (e) {
+    return false;
+  }
+};
+
+const prevState = getStoreFromLocalStorage();
+let store;
+
+if (prevState) {
+  store = createStore(reducer, prevState, window.__REDUX_DEVTOOLS_EXTENSION__()); //eslint-disable-line
+} else {
+  store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__()); //eslint-disable-line
+}
+
+window.addEventListener('unload', () => {
+  localStorage.setItem('state', JSON.stringify(store.getState()));
+});
 
 ReactDOM.render( // eslint-disable-next-line
   <Provider store={store}>

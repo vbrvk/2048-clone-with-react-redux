@@ -20,7 +20,7 @@ const defaultColorScheme = {
   16384: '#4CAF50',
 };
 
-const Grid = ({ game, colorScheme }) => {
+const Grid = ({ game, colorScheme, width, height }) => {
   const emptyBlocks = [];
   for (let y = 0; y < game.height; ++y) { // eslint-disable-line
     for (let x = 0; x < game.width; ++x) { // eslint-disable-line
@@ -48,8 +48,8 @@ const Grid = ({ game, colorScheme }) => {
       style={{
         padding: `${game.borderWidth}px`,
         backgroundColor: colorScheme.backgroundColor,
-        width: `${(game.blockSize * game.width) + (game.borderWidth * (game.width - 1))}px`,
-        height: `${(game.blockSize * game.height) + (game.borderWidth * (game.height - 1))}px`,
+        width,
+        height,
       }}
       className="Grid"
     >
@@ -78,6 +78,8 @@ Grid.propTypes = {
     blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     score: React.PropTypes.number.isRequired,
   }).isRequired,
+  width: React.PropTypes.string.isRequired,
+  height: React.PropTypes.string.isRequired,
   colorScheme: React.PropTypes.shape({
     backgroundColor: React.PropTypes.string,
     2: React.PropTypes.string,
