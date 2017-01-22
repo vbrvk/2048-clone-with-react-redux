@@ -16,7 +16,7 @@ const getStoreFromLocalStorage = () => {
   }
 };
 
-const prevState = getStoreFromLocalStorage();
+const prevState = getStoreFromLocalStorage(); // TODO enable
 let store;
 
 if (prevState) {

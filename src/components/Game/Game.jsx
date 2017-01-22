@@ -63,7 +63,9 @@ class Game extends React.Component {
     return (
       <div>
         <Header
-          width={`${parseInt(size.width, 10) + (2 * game.borderWidth)}px`} score={game.score}
+          width={`${parseInt(size.width, 10) + (2 * game.borderWidth)}px`}
+          score={game.score}
+          bestScore={game.bestScore}
           onClickButton={this.props.newGame}
         />
         <Grid
@@ -96,6 +98,7 @@ Game.propTypes = {
   game: React.PropTypes.shape({
     blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     score: React.PropTypes.number.isRequired,
+    bestScore: React.PropTypes.number.isRequired,
     blockSize: React.PropTypes.number.isRequired,
     borderWidth: React.PropTypes.number.isRequired,
   }).isRequired,

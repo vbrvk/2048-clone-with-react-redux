@@ -3,7 +3,7 @@ import React from 'react';
 import './Header.css';
 
 
-const Header = ({ width, onClickButton, score }) =>
+const Header = ({ width, onClickButton, score, bestScore }) =>
 (
   <div style={{ width }} className="Header pt-card">
     <h5 className="pt-ui-text-large">
@@ -11,6 +11,7 @@ const Header = ({ width, onClickButton, score }) =>
     </h5>
     <p className="score">
       Score: {score}&nbsp;
+      Best: {bestScore}&nbsp;
       <button
         onClick={onClickButton}
         type="button"
@@ -26,6 +27,7 @@ const Header = ({ width, onClickButton, score }) =>
 Header.propTypes = {
   width: React.PropTypes.string.isRequired,
   score: React.PropTypes.number.isRequired,
+  bestScore: React.PropTypes.number.isRequired,
   onClickButton: React.PropTypes.func.isRequired,
 };
 export default Header;

@@ -125,6 +125,7 @@ const getNewBlocksAfterKeyPress = (state, vector) => {
           currentBlock.merged = true;
           currentBlock.value *= 2;
           state.score += currentBlock.value;
+          if (state.score > state.bestScore) state.bestScore = state.score;
           moved = true;
 
           if (currentBlock.value === 2048) state.status = GAME_STATUS.WIN;
@@ -159,6 +160,7 @@ const getNewGameState = (width = 4, height = 4) => {
     blocks: [],
     borderWidth: 10,
     score: 0,
+    bestScore: 0,
     status: GAME_STATUS.PLAY,
   };
 
@@ -174,15 +176,7 @@ const getNewGameState = (width = 4, height = 4) => {
   return state;
 };
 
-const getStateFromLocalStorage = () => {
-  try {
-    return JSON.parse(localStorage.getItem('state').game);
-  } catch (e) {
-    return false;
-  }
-};
-
-const defaultState = getStateFromLocalStorage() || getNewGameState();
+const defaultState = getNewGameState();
 
 
 export default (state = defaultState, action) => {
@@ -197,6 +191,7 @@ export default (state = defaultState, action) => {
     case (actionTypes.NEW_GAME):
       return {
         ...getNewGameState(),
+        bestScore: state.bestScore,
       };
     case (actionTypes.CONTINUE_GAME):
       return {

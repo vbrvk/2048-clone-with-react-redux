@@ -2,12 +2,14 @@
   "name": "2048-clone-with-react-redux",
   "version": "0.1.0",
   "private": true,
+  "homepage": "http://borovik96.github.io/2048-react-redux",
   "devDependencies": {
     "eslint": "^3.13.1",
     "eslint-config-airbnb": "^14.0.0",
     "eslint-plugin-import": "^2.2.0",
     "eslint-plugin-jsx-a11y": "^3.0.2",
     "eslint-plugin-react": "^6.9.0",
+    "gh-pages": "^0.12.0",
     "react-scripts": "0.8.5"
   },
   "dependencies": {
@@ -25,6 +27,7 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "deploy": "npm run build && gh-pages -d build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   }
