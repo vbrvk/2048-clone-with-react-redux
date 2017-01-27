@@ -9,14 +9,16 @@ function Block({ value, color, size, position, merged }) {
         zIndex: merged ? '20' : '1',
         width: `${size.block}px`,
         height: `${size.block}px`,
+        fontSize: `${size.block / 2.5}px`,
+        lineHeight: `${size.block}px`,
         transform: `translate(
-        ${position.x * (size.block + size.margin)}px,
-        ${position.y * (size.block + size.margin)}px
+          ${position.x * (size.block + size.margin)}px,
+          ${position.y * (size.block + size.margin)}px
         )`,
       }}
       className="game-block"
     >
-      <span className="text-align-center">{value}</span>
+      <span>{value}</span>
     </div>
   );
 }
