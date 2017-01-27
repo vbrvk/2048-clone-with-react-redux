@@ -106,7 +106,9 @@ class Game extends React.Component {
           width={`${parseInt(size.width, 10) + (2 * game.borderWidth)}px`}
           score={game.score}
           bestScore={game.bestScore}
-          onClickButton={this.props.newGame}
+          newGame={this.props.newGame}
+          savedGamesCount={this.props.savedGamesCount}
+          saveGame={this.props.saveGame}
         />
         <Grid
           width={size.width}
@@ -135,6 +137,8 @@ Game.propTypes = {
   }).isRequired,
   newGame: React.PropTypes.func.isRequired,
   continueGame: React.PropTypes.func.isRequired,
+  saveGame: React.PropTypes.func.isRequired,
+  savedGamesCount: React.PropTypes.number.isRequired,
   game: React.PropTypes.shape({
     blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
     score: React.PropTypes.number.isRequired,
@@ -145,7 +149,8 @@ Game.propTypes = {
 };
 
 export default connect(state => ({
-  game: state.game,
+  game: state.games.currentGame,
+  savedGamesCount: state.games.saved.length,
 }), dispatch => ({
   onKeyPress: {
     Up: () => {
@@ -166,5 +171,8 @@ export default connect(state => ({
   },
   continueGame: () => {
     dispatch(actions.continueGame());
+  },
+  saveGame: () => {
+    dispatch(actions.saveGame());
   },
 }))(Game);

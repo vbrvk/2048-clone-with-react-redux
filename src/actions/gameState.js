@@ -8,5 +8,9 @@ export const continueGame = () => ({
   type: actionTypes.CONTINUE_GAME,
 });
 
+export const saveGame = () => ({
+  type: actionTypes.SAVE_GAME,
+});
 
-export default { newGame, continueGame };
+
+export default { newGame, continueGame, saveGame };

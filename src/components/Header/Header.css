@@ -2,6 +2,23 @@
   margin: 50px auto 10px auto;
 }
 
+.Header h2{
+  color: #30404d;
+  width: 70%;
+  float: left;
+}
+
+.Header button{
+  margin-right: 20px;
+}
+
+.Header:after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
 .Header .score {
-  font-size: 2em;
+  width: 30%;
+  float: right;
 }

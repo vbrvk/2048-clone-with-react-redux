@@ -1,33 +1,82 @@
 import React from 'react';
-
+import { Alert } from '@blueprintjs/core';
 import './Header.css';
 
 
-const Header = ({ width, onClickButton, score, bestScore }) =>
-(
-  <div style={{ width }} className="Header pt-card">
-    <h5 className="pt-ui-text-large">
-      Join the numbers and get to the 2048 tile!
-    </h5>
-    <p className="score">
-      Score: {score}&nbsp;
-      Best: {bestScore}&nbsp;
-      <button
-        onClick={onClickButton}
-        type="button"
-        className="new-game-button pt-button pt-intent-primary pt-icon-refresh"
-      >
-        New game
-      </button>
-    </p>
+class Header extends React.Component {
+  constructor() {
+    super();
+    this.state = {
+      showAlert: false,
+    };
+    this.showAlert = this.showAlert.bind(this);
+    this.hideAlert = this.hideAlert.bind(this);
+    this.saveGame = this.saveGame.bind(this);
+  }
 
-  </div>
-);
+  showAlert() {
+    this.setState({ showAlert: true });
+  }
+
+  hideAlert() {
+    this.setState({ showAlert: false });
+  }
+
+  saveGame() {
+    this.props.saveGame();
+    this.hideAlert();
+  }
+
+  render() {
+    return (
+      <div style={{ width: this.props.width }} className="Header">
+        <h2>
+          Join the numbers and get to the 2048 tile!
+        </h2>
+        <div className="score">
+          <p className="pt-card pt-ui-text-large">
+            Score: {this.props.score}
+          </p>
+          <p className="pt-card pt-ui-text-large">
+            Best: {this.props.bestScore}
+          </p>
+        </div>
+        <button
+          onClick={this.props.newGame}
+          type="button"
+          className="new-game-button pt-button pt-intent-primary pt-icon-refresh"
+        >
+          New game
+        </button>
+        <button
+          onClick={this.props.savedGamesCount < 10 ?
+            this.props.saveGame : this.showAlert
+          }
+          type="button"
+          className="new-game-button pt-button pt-intent-primary pt-icon-floppy-disk"
+        >
+          Save game
+        </button>
+        <Alert
+          isOpen={this.state.showAlert}
+          confirmButtonText="Yes"
+          cancelButtonText="No"
+          onConfirm={this.saveGame}
+          onCancel={this.hideAlert}
+        >
+          You have 10 saved games. Do you want rewrite oldest game?
+        </Alert>
+      </div>
+    );
+  }
+}
 
 Header.propTypes = {
   width: React.PropTypes.string.isRequired,
   score: React.PropTypes.number.isRequired,
   bestScore: React.PropTypes.number.isRequired,
-  onClickButton: React.PropTypes.func.isRequired,
+  savedGamesCount: React.PropTypes.number.isRequired,
+  newGame: React.PropTypes.func.isRequired,
+  saveGame: React.PropTypes.func.isRequired,
 };
 export default Header;

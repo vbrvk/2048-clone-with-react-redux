@@ -1,6 +1,5 @@
-import { eq } from 'lodash';
-import { actionTypes, GAME_STATUS, VECTORS } from '../constants';
-import { setNewRandomElement, getNewBlock } from './helpers';
+import { eq, random, flatten } from 'lodash';
+import { GAME_STATUS, VECTORS } from '../constants';
 
 /* eslint-disable no-param-reassign*/
 
@@ -8,6 +7,28 @@ const getFieldSizeFromBlocks = blocks => ({
   width: blocks[0].length,
   height: blocks.length,
 });
+
+
+const getNewBlock = position => ({
+  value: null,
+  position: {
+    ...position,
+  },
+});
+
+const setNewRandomElement = (blocks) => { //eslint-disable-line
+  const nullBlocks = flatten(blocks).filter(block => !block.value);
+  if (nullBlocks.length) {
+    const newBlock = nullBlocks[random(nullBlocks.length - 1)];
+    newBlock.value = Math.random() > 0.9 ? 4 : 2;
+    const { x, y } = newBlock.position;
+    return [
+      ...blocks.slice(0, y),
+      [...blocks[y].slice(0, x), newBlock, ...blocks[y].slice(x + 1)],
+      ...blocks.slice(y + 1),
+    ];
+  }
+};
 
 const isInField = (position, fieldSize) => position.x >= 0 &&
                                            position.y >= 0 &&
@@ -98,7 +119,7 @@ const isGameEnd = (blocks) => {
   return true;
 };
 
-const getNewBlocksAfterKeyPress = (state, vector) => {
+export const getNewBlocksAfterKeyPress = (state, vector) => {
   let { blocks } = state;
   const fieldSize = getFieldSizeFromBlocks(blocks);
   const traversals = buildTraversals(fieldSize, vector);
@@ -152,7 +173,7 @@ const getNewBlocksAfterKeyPress = (state, vector) => {
   };
 };
 
-const getNewGameState = (width = 4, height = 4) => {
+export const getNewGameState = (width = 4, height = 4) => {
   const state = {
     width,
     height,
@@ -176,28 +197,4 @@ const getNewGameState = (width = 4, height = 4) => {
   return state;
 };
 
-const defaultState = getNewGameState();
-
-
-export default (state = defaultState, action) => {
-  switch (action.type) {
-    case (actionTypes.PRESS_DOWN_KEY):
-    case (actionTypes.PRESS_UP_KEY):
-    case (actionTypes.PRESS_RIGHT_KEY):
-    case (actionTypes.PRESS_LEFT_KEY):
-      return {
-        ...(getNewBlocksAfterKeyPress(state, action.vector)),
-      };
-    case (actionTypes.NEW_GAME):
-      return {
-        ...getNewGameState(),
-        bestScore: state.bestScore,
-      };
-    case (actionTypes.CONTINUE_GAME):
-      return {
-        ...state,
-        status: GAME_STATUS.PLAY,
-      };
-    default: return state;
-  }
-};
+export default { getNewBlocksAfterKeyPress, getNewGameState };

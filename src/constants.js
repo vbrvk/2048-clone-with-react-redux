@@ -7,6 +7,7 @@ export const actionTypes = keymirror({
   PRESS_DOWN_KEY: null,
   NEW_GAME: null,
   CONTINUE_GAME: null,
+  SAVE_GAME: null,
 });
 
 export const VECTORS = {
