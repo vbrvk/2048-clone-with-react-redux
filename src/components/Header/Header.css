@@ -4,7 +4,7 @@
 
 .Header h2{
   color: #30404d;
-  width: 70%;
+  width: 65%;
   float: left;
 }
 
@@ -19,6 +19,6 @@
 }
 
 .Header .score {
-  width: 30%;
+  width: 35%;
   float: right;
 }

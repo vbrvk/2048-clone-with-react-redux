@@ -1,4 +1,3 @@
-/* eslint-disable jsx-filename-extension */
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
@@ -9,12 +8,13 @@ import reducer from './reducers';
 
 import App from './components/App';
 import Game from './components/Game/';
+import GameList from './components/GameList/';
 
 import './index.css';
 
 const getStoreFromLocalStorage = () => {
   try {
-    return JSON.parse(localStorage.getItem('state'));
+    return true && JSON.parse(localStorage.getItem('state'));
   } catch (e) {
     return false;
   }
@@ -40,7 +40,7 @@ ReactDOM.render( // eslint-disable-next-line
     <Router history={browserHistory}>
       <Route path="/" component={App}>
         <IndexRoute component={Game} />
-        <Route path="saved" component={null} />
+        <Route path="saved" component={GameList} />
       </Route>
     </Router>
   </Provider>,

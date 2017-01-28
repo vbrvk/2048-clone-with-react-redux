@@ -1,5 +1,5 @@
 import { getNewGameState, getNewBlocksAfterKeyPress } from './currentGame';
-import saveGame from './savedGames';
+import { saveGame, deleteGame, loadGame } from './savedGames';
 import { actionTypes, GAME_STATUS } from '../constants';
 
 
@@ -39,6 +39,17 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         saved: saveGame(state.saved, state.currentGame),
+      };
+    case (actionTypes.LOAD_GAME_FROM_SAVED):
+      return {
+        ...state,
+        currentGame: loadGame(state.saved, action.index),
+      };
+    case (actionTypes.DELETE_FROM_SAVED_GAMES):
+      console.log(deleteGame(state.saved, action.index));
+      return {
+        ...state,
+        saved: deleteGame(state.saved, action.index),
       };
     default: return state;
   }

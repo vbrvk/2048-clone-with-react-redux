@@ -12,5 +12,15 @@ export const saveGame = () => ({
   type: actionTypes.SAVE_GAME,
 });
 
+export const deleteFromSavedGames = index => ({
+  type: actionTypes.DELETE_FROM_SAVED_GAMES,
+  index,
+});
 
-export default { newGame, continueGame, saveGame };
+export const loadGameFromSaved = index => ({
+  type: actionTypes.LOAD_GAME_FROM_SAVED,
+  index,
+});
+
+
+export default { newGame, continueGame, saveGame, deleteFromSavedGames, loadGameFromSaved };

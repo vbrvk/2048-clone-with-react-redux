@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Alert } from '@blueprintjs/core';
+import { Alert, Position, Toaster } from '@blueprintjs/core';
 import '@blueprintjs/core/dist/blueprint.css';
 
 import { KEY_CODES, GAME_STATUS } from '../../constants';
@@ -8,12 +8,20 @@ import actions from '../../actions';
 import Grid from '../Grid';
 import Header from '../Header';
 
-
+const Toast = Toaster.create({
+  position: Position.BOTTOM_RIGHT,
+});
+const showToast = message => Toast.show({
+  className: 'pt-intent-primary',
+  message,
+  timeout: 2500,
+});
 class Game extends React.Component {
   constructor() {
     super();
     this.handleKeyPress = this.handleKeyPress.bind(this);
     this.getSize = this.getSize.bind(this);
+    this.saveGame = this.saveGame.bind(this);
   }
 
   componentDidMount() {
@@ -29,6 +37,12 @@ class Game extends React.Component {
 
   getSize(size) {
     return `${(this.props.game.blockSize * this.props.game[size]) + (this.props.game.borderWidth * (this.props.game[size] - 1))}px`;
+  }
+
+
+  saveGame() {
+    this.props.saveGame();
+    showToast('Game saved');
   }
 
   handleSwipe() {
@@ -108,7 +122,7 @@ class Game extends React.Component {
           bestScore={game.bestScore}
           newGame={this.props.newGame}
           savedGamesCount={this.props.savedGamesCount}
-          saveGame={this.props.saveGame}
+          saveGame={this.saveGame}
         />
         <Grid
           width={size.width}

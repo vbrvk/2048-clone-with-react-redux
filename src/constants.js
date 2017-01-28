@@ -8,6 +8,8 @@ export const actionTypes = keymirror({
   NEW_GAME: null,
   CONTINUE_GAME: null,
   SAVE_GAME: null,
+  DELETE_FROM_SAVED_GAMES: null,
+  LOAD_GAME_FROM_SAVED: null,
 });
 
 export const VECTORS = {
