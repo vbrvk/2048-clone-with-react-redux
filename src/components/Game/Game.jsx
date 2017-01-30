@@ -36,7 +36,7 @@ class Game extends React.Component {
   }
 
   getSize(size) {
-    return `${(this.props.game.blockSize * this.props.game[size]) + (this.props.game.borderWidth * (this.props.game[size] - 1))}px`;
+    return `${(this.props.game.blockSize * this.props.game.size[size]) + (this.props.game.borderWidth * (this.props.game.size[size] - 1))}px`;
   }
 
 
@@ -154,7 +154,13 @@ Game.propTypes = {
   saveGame: React.PropTypes.func.isRequired,
   savedGamesCount: React.PropTypes.number.isRequired,
   game: React.PropTypes.shape({
-    blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
+    blocks: React.PropTypes.shape({
+      active: React.PropTypes.array,
+    }).isRequired,
+    size: React.PropTypes.shape({
+      width: React.PropTypes.number,
+      height: React.PropTypes.number,
+    }).isRequired,
     score: React.PropTypes.number.isRequired,
     bestScore: React.PropTypes.number.isRequired,
     blockSize: React.PropTypes.number.isRequired,

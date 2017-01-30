@@ -1,75 +1,84 @@
-import { eq, random, flatten } from 'lodash';
+import { eq, random, find, findIndex } from 'lodash';
 import { GAME_STATUS, VECTORS } from '../constants';
 
-/* eslint-disable no-param-reassign*/
+/* eslint-disable no-param-reassign */
 
-const getFieldSizeFromBlocks = blocks => ({
-  width: blocks[0].length,
-  height: blocks.length,
-});
-
-
-const getNewBlock = position => ({
-  value: null,
-  position: {
-    ...position,
-  },
-});
-
-const setNewRandomElement = (blocks) => { //eslint-disable-line
-  const nullBlocks = flatten(blocks).filter(block => !block.value);
-  if (nullBlocks.length) {
-    const newBlock = nullBlocks[random(nullBlocks.length - 1)];
-    newBlock.value = Math.random() > 0.9 ? 4 : 2;
-    const { x, y } = newBlock.position;
-    return [
-      ...blocks.slice(0, y),
-      [...blocks[y].slice(0, x), newBlock, ...blocks[y].slice(x + 1)],
-      ...blocks.slice(y + 1),
-    ];
+const getEmptyBlocks = (size) => {
+  const blocks = [];
+  for (let x = 0; x < size.width; x += 1) {
+    for (let y = 0; y < size.height; y += 1) {
+      blocks.push({ x, y });
+    }
   }
+
+  return blocks;
 };
 
-const isInField = (position, fieldSize) => position.x >= 0 &&
+
+const getNewBlocksState = (blocks) => {
+  const randIndex = random(blocks.empty.length - 1);
+
+  return {
+    active: [...blocks.active, {
+      position: blocks.empty[randIndex],
+      value: Math.random() > 0.9 ? 4 : 2,
+      id: blocks.nextId,
+      new: true,
+    }],
+    empty: [...blocks.empty.slice(0, randIndex), ...blocks.empty.slice(randIndex + 1)],
+    nextId: blocks.nextId + 1,
+  };
+};
+
+const isInField = (position, size) => position.x >= 0 &&
                                            position.y >= 0 &&
-                                           position.x < fieldSize.width &&
-                                           position.y < fieldSize.height;
+                                           position.x < size.width &&
+                                           position.y < size.height;
 
 const getBlock = (blocks, position) => {
-  if (isInField(position, getFieldSizeFromBlocks(blocks))) {
-    return blocks[position.y][position.x];
+  let index = 0;
+  const foundBlocks = [];
+  while (index < blocks.length) {
+    index = findIndex(blocks, { position }, index);
+    if (index === -1) {
+      index = blocks.length;
+    } else {
+      foundBlocks.push(blocks[index]);
+      index += 1;
+    }
   }
-  return null;
+
+  if (foundBlocks.length > 1) {
+    return find(foundBlocks, { position, merged: true });
+  }
+  return foundBlocks[0];
 };
 
-const setBlock = (blocks, position, block) => {
-  if (isInField(position, getFieldSizeFromBlocks(blocks))) {
-    blocks[position.y][position.x] = block;
-    return blocks[position.y][position.x];
-  }
+const isExistMergedCopy = (blocks, position) => !!find(blocks, { position, merged: true });
 
-  return false;
+const setBlock = (blocks, position, block) => {
+  const index = findIndex(blocks, position);
+  return [...blocks.slice(0, index), block, ...blocks.slice(index + 1)];
 };
 
 const isBlockAvailable = (blocks, position) => {
   const block = getBlock(blocks, position);
-  return block ? !block.value : false;
+  return !block;
 };
 
-const getFarthestPosition = (blocks, position, vector) => { // eslint-disable-line
+const getFarthestPosition = (blocks, size, position, vector) => { // eslint-disable-line
   let previos;
-  const fieldSize = getFieldSizeFromBlocks(blocks);
   do {
     previos = position;
     position = { x: previos.x + vector.x, y: previos.y + vector.y };
   } while (
       isBlockAvailable(blocks, position) &&
-      isInField(position, fieldSize)
+      isInField(position, size)
     );
 
   return {
     farthest: previos,
-    next: isInField(position, fieldSize) ? blocks[position.y][position.x] : null,
+    next: getBlock(blocks, position),
   };
 };
 
@@ -85,28 +94,28 @@ const buildTraversals = (fieldSize, vector) => {
   return traversals;
 };
 
-const normalize = blocks => blocks.map(rows => rows.map(block => ({ ...block, merged: false })));
+const normalize = blocks =>
+  blocks.filter(block => block.merged || !isExistMergedCopy(blocks, block.position))
+        .map(block => ({ ...block, merged: false, new: false }));
 
-const isExitAvailableBlock = (blocks) => {
-  for (let rows of blocks) { // eslint-disable-line
-    for (let block of rows) { // eslint-disable-line
-      if (block.value === null) return true;
-    }
-  }
-  return false;
-};
+const isExitAvailableBlock = emptyBlocks => !!emptyBlocks.length;
 
 const isExitBlocksForMerdge = (blocks) => {
   const vectorKeys = Object.keys(VECTORS);
   let sideBlock;
-  for (let rows of blocks) { // eslint-disable-line
-    for (let block of rows) { // eslint-disable-line
-      for (let vectorKey of vectorKeys) { // eslint-disable-line
-        sideBlock = getBlock(blocks, {
-          x: block.position.x + VECTORS[vectorKey].x,
-          y: block.position.y + VECTORS[vectorKey].y,
-        });
-        if (sideBlock && sideBlock.value === block.value) return true;
+  for (let block of blocks) {  // eslint-disable-line
+    for (let vectorKey of vectorKeys) { // eslint-disable-line
+      sideBlock = getBlock(blocks, {
+        x: block.position.x + VECTORS[vectorKey].x,
+        y: block.position.y + VECTORS[vectorKey].y,
+      });
+      if (
+        sideBlock &&
+        (!isExistMergedCopy(blocks, sideBlock.position) || sideBlock.merged) &&
+        (!isExistMergedCopy(blocks, block.position) || block.merged) &&
+        sideBlock.value === block.value
+      ) {
+        return true;
       }
     }
   }
@@ -115,47 +124,54 @@ const isExitBlocksForMerdge = (blocks) => {
 };
 
 const isGameEnd = (blocks) => {
-  if (isExitAvailableBlock(blocks) || isExitBlocksForMerdge(blocks)) return false;
+  if (isExitAvailableBlock(blocks.empty) || isExitBlocksForMerdge(blocks.active)) return false;
   return true;
 };
 
 export const getNewBlocksAfterKeyPress = (state, vector) => {
   let { blocks } = state;
-  const fieldSize = getFieldSizeFromBlocks(blocks);
-  const traversals = buildTraversals(fieldSize, vector);
+  const { size } = state;
+  const newState = { ...state };
+  const traversals = buildTraversals(size, vector);
   let currentBlock;
   let positions;
   let next;
   let moved = false;
 
-  blocks = normalize(blocks);
+  blocks.active = normalize(blocks.active);
 
   traversals.x.forEach((x) => {
     traversals.y.forEach((y) => {
-      currentBlock = blocks[y][x];
-      if (currentBlock.value) {
-        positions = getFarthestPosition(blocks, currentBlock.position, vector);
+      currentBlock = getBlock(blocks.active, { x, y });
+      if (currentBlock) {
+        positions = getFarthestPosition(blocks.active, size, currentBlock.position, vector);
         next = positions.next;
+
         if (next && next.value === currentBlock.value && !next.merged) {
-          const prevPos = currentBlock.position;
-          currentBlock.position = next.position;
+          let newActiveBlocks;
+          const newValue = next.value * 2;
+          blocks.empty = [...blocks.empty, currentBlock.position];
 
-          setBlock(blocks, currentBlock.position, currentBlock);
-          setBlock(blocks, prevPos, getNewBlock(prevPos));
-
-          currentBlock.merged = true;
-          currentBlock.value *= 2;
-          state.score += currentBlock.value;
-          if (state.score > state.bestScore) state.bestScore = state.score;
+          newActiveBlocks = setBlock(blocks.active, { position: next.position }, {
+            ...next, value: newValue, merged: true,
+          });
+          newActiveBlocks = setBlock(newActiveBlocks, { position: currentBlock.position }, {
+            ...currentBlock, position: next.position,
+          });
+          blocks.active = newActiveBlocks;
+          newState.score += newValue;
+          if (newState.score > newState.bestScore) newState.bestScore = newState.score;
           moved = true;
 
-          if (currentBlock.value === 2048) state.status = GAME_STATUS.WIN;
+          if (newValue === 2048 && !newState.isWon) {
+            newState.status = GAME_STATUS.WIN;
+            newState.isWon = true;
+          }
         } else if (!eq(positions.farthest, currentBlock.position)) {
-          const prevPos = currentBlock.position;
-          currentBlock.position = positions.farthest;
-          setBlock(blocks, positions.farthest, currentBlock);
-          setBlock(blocks, prevPos, getNewBlock(prevPos));
-
+          blocks.empty = setBlock(blocks.empty, positions.farthest, currentBlock.position);
+          blocks.active = setBlock(blocks.active, { position: currentBlock.position }, {
+            ...currentBlock, position: positions.farthest,
+          });
           moved = true;
         }
       }
@@ -163,37 +179,42 @@ export const getNewBlocksAfterKeyPress = (state, vector) => {
   });
 
   if (moved) {
-    setNewRandomElement(blocks);
-    if (isGameEnd(blocks)) state.status = GAME_STATUS.LOSE;
+    blocks = getNewBlocksState(blocks);
+    if (isGameEnd(blocks)) newState.status = GAME_STATUS.LOSE;
   }
 
   return {
-    ...state,
-    blocks: [...blocks],
+    ...newState,
+    blocks: {
+      ...blocks,
+    },
   };
 };
 
 export const getNewGameState = (width = 4, height = 4) => {
   const state = {
-    width,
-    height,
+    size: {
+      width,
+      height,
+    },
     blockSize: 100,
-    blocks: [],
+    blocks: {
+      active: [],
+      empty: [],
+      nextId: 0,
+    },
     borderWidth: 10,
     score: 0,
     bestScore: 0,
+    isWon: false,
     status: GAME_STATUS.PLAY,
   };
 
-  for (let y = 0; y < state.height; ++y) { // eslint-disable-line
-    state.blocks.push([]);
-    for (let x = 0; x < state.width; ++x) { //eslint-disable-line
-      state.blocks[y].push(getNewBlock({ x, y }));
-    }
-  }
-  // state.blocks[0][0].value = 1024;
-  // state.blocks[0][1].value = 1024;
-  setNewRandomElement(setNewRandomElement(state.blocks));
+  state.blocks.empty = getEmptyBlocks(state.size);
+
+  state.blocks = getNewBlocksState(state.blocks);
+  state.blocks = getNewBlocksState(state.blocks);
+
   return state;
 };
 

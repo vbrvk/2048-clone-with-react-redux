@@ -22,8 +22,8 @@ const defaultColorScheme = {
 
 const Grid = ({ game, colorScheme, width, height }) => {
   const emptyBlocks = [];
-  for (let y = 0; y < game.height; ++y) { // eslint-disable-line
-    for (let x = 0; x < game.width; ++x) { // eslint-disable-line
+  for (let y = 0; y < game.size.height; ++y) { // eslint-disable-line
+    for (let x = 0; x < game.size.width; ++x) { // eslint-disable-line
       emptyBlocks.push(
         <div
           className="Game-empty-block"
@@ -55,28 +55,36 @@ const Grid = ({ game, colorScheme, width, height }) => {
     >
       {emptyBlocks}
       {
-        game.blocks.map((rows, y) => rows.map((block, x) => (
-          block.value ? (
+        game.blocks.active.map(block => (
+          (
             <Block
+              key={block.id}
               size={{
                 block: game.blockSize,
                 margin: game.borderWidth,
               }}
+              isNew={block.new}
               color={colorScheme[block.value]}
               value={block.value}
-              position={{ x, y }}
-              merged={!!block.mergedWith}
+              position={block.position}
+              merged={block.merged}
             />
-          ) : null
-        )))
+          )
+        ))
       }
     </div>);
 };
 
 Grid.propTypes = {
   game: React.PropTypes.shape({
-    blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
+    blocks: React.PropTypes.shape({
+      active: React.PropTypes.array,
+    }).isRequired,
     score: React.PropTypes.number.isRequired,
+    size: React.PropTypes.shape({
+      width: React.PropTypes.number,
+      height: React.PropTypes.number,
+    }).isRequired,
   }).isRequired,
   width: React.PropTypes.string.isRequired,
   height: React.PropTypes.string.isRequired,

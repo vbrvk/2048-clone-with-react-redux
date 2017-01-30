@@ -14,31 +14,37 @@ import './index.css';
 
 const getStoreFromLocalStorage = () => {
   try {
-    return true && JSON.parse(localStorage.getItem('state'));
+    return false && JSON.parse(localStorage.getItem('state'));
   } catch (e) {
     return false;
   }
 };
 
-const getReduxDevelopTools = () => (process.env.NODE_ENV === 'production' ? null : (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));//eslint-disable-line
+const getReduxDevelopTools = (process.env.NODE_ENV === 'production' ? null : (window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()));//eslint-disable-line
 
 const prevState = getStoreFromLocalStorage();
 let store;
 
 if (prevState) {
-  store = createStore(reducer, prevState, getReduxDevelopTools());
+  store = getReduxDevelopTools ?
+          createStore(reducer, prevState, getReduxDevelopTools) :
+          createStore(reducer, prevState);
 } else {
-  store = createStore(reducer, getReduxDevelopTools());
+  store = getReduxDevelopTools ?
+          createStore(reducer, getReduxDevelopTools) :
+          createStore(reducer);
 }
 
 window.addEventListener('unload', () => {
   localStorage.setItem('state', JSON.stringify(store.getState()));
 });
 
+const rootPath = process.env.NODE_ENV === 'production' ? '/2048-clone-with-react-redux' : '/';
+
 ReactDOM.render( // eslint-disable-next-line
   <Provider store={store}>
     <Router history={browserHistory}>
-      <Route path="/" component={App}>
+      <Route path={rootPath} component={App}>
         <IndexRoute component={Game} />
         <Route path="saved" component={GameList} />
       </Route>

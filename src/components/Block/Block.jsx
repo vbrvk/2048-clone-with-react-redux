@@ -1,7 +1,7 @@
 import React from 'react';
 import './Block.css';
 
-function Block({ value, color, size, position, merged }) {
+function Block({ value, color, size, position, merged, isNew }) {
   return (
     <div
       style={{
@@ -11,12 +11,14 @@ function Block({ value, color, size, position, merged }) {
         height: `${size.block}px`,
         fontSize: `${size.block / 2.5}px`,
         lineHeight: `${size.block}px`,
-        transform: `translate(
-          ${position.x * (size.block + size.margin)}px,
-          ${position.y * (size.block + size.margin)}px
-        )`,
+        left: `${(position.x * (size.block + size.margin)) + size.margin}px`,
+        top: `${(position.y * (size.block + size.margin)) + size.margin}px`,
+        // transform: `translate(
+        //   ${position.x * (size.block + size.margin)}px,
+        //   ${position.y * (size.block + size.margin)}px
+        // )`,
       }}
-      className="game-block"
+      className={`game-block ${isNew ? 'new-block' : ''} ${merged ? 'merged-block' : ''}`}
     >
       <span>{value}</span>
     </div>
@@ -28,7 +30,8 @@ Block.propTypes = {
     [React.PropTypes.number, React.PropTypes.instanceOf(null)],
   ),
   color: React.PropTypes.string,
-  merged: React.PropTypes.bool.isRequired,
+  merged: React.PropTypes.bool,
+  isNew: React.PropTypes.bool,
   size: React.PropTypes.shape({
     block: React.PropTypes.number,
     margin: React.PropTypes.number,
@@ -41,6 +44,8 @@ Block.propTypes = {
 
 Block.defaultProps = {
   value: null,
+  merged: false,
+  isNew: false,
   color: '#4CAF50',
   size: {
     block: 100,
