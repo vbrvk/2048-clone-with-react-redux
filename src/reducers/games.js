@@ -1,23 +1,28 @@
 import { getNewGameState, getNewBlocksAfterKeyPress } from './currentGame';
 import { saveGame, deleteGame, loadGame } from './savedGames';
 import { actionTypes, GAME_STATUS } from '../constants';
+import getBestScores from './bestScores';
 
 
 const defaultState = {
   currentGame: getNewGameState(),
   saved: [],
+  bestScores: {},
 };
 
 
 export default (state = defaultState, action) => {
+  let currentGame;
   switch (action.type) {
     case (actionTypes.PRESS_DOWN_KEY):
     case (actionTypes.PRESS_UP_KEY):
     case (actionTypes.PRESS_RIGHT_KEY):
     case (actionTypes.PRESS_LEFT_KEY):
+      currentGame = (getNewBlocksAfterKeyPress(state.currentGame, action.vector));
       return {
         ...state,
-        currentGame: (getNewBlocksAfterKeyPress(state.currentGame, action.vector)),
+        currentGame,
+        bestScores: getBestScores(state.bestScores, currentGame.score, currentGame.size),
       };
     case (actionTypes.NEW_GAME):
       return {

@@ -160,7 +160,7 @@ export const getNewBlocksAfterKeyPress = (state, vector) => {
           });
           blocks.active = newActiveBlocks;
           newState.score += newValue;
-          if (newState.score > newState.bestScore) newState.bestScore = newState.score;
+          // if (newState.score > newState.bestScore) newState.bestScore = newState.score;
           moved = true;
 
           if (newValue === 2048 && !newState.isWon) {
@@ -205,7 +205,6 @@ export const getNewGameState = (width = 4, height = 4) => {
     },
     borderWidth: 10,
     score: 0,
-    bestScore: 0,
     isWon: false,
     status: GAME_STATUS.PLAY,
   };

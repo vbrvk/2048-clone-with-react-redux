@@ -4,6 +4,9 @@ import { Alert, Position, Toaster } from '@blueprintjs/core';
 import '@blueprintjs/core/dist/blueprint.css';
 
 import { KEY_CODES, GAME_STATUS } from '../../constants';
+
+import { getNameOfScoreField } from '../../reducers/bestScores'; // TODO fix dependend from reducer
+
 import actions from '../../actions';
 import Grid from '../Grid';
 import Header from '../Header';
@@ -119,7 +122,7 @@ class Game extends React.Component {
         <Header
           width={`${parseInt(size.width, 10) + (2 * game.borderWidth)}px`}
           score={game.score}
-          bestScore={game.bestScore}
+          bestScore={this.props.bestScore}
           newGame={this.props.newGame}
           savedGamesCount={this.props.savedGamesCount}
           saveGame={this.saveGame}
@@ -153,6 +156,7 @@ Game.propTypes = {
   continueGame: React.PropTypes.func.isRequired,
   saveGame: React.PropTypes.func.isRequired,
   savedGamesCount: React.PropTypes.number.isRequired,
+  bestScore: React.PropTypes.number.isRequired,
   game: React.PropTypes.shape({
     blocks: React.PropTypes.shape({
       active: React.PropTypes.array,
@@ -162,7 +166,6 @@ Game.propTypes = {
       height: React.PropTypes.number,
     }).isRequired,
     score: React.PropTypes.number.isRequired,
-    bestScore: React.PropTypes.number.isRequired,
     blockSize: React.PropTypes.number.isRequired,
     borderWidth: React.PropTypes.number.isRequired,
   }).isRequired,
@@ -170,6 +173,7 @@ Game.propTypes = {
 
 export default connect(state => ({
   game: state.games.currentGame,
+  bestScore: state.games.bestScores[getNameOfScoreField(state.games.currentGame.size)] || 0,
   savedGamesCount: state.games.saved.length,
 }), dispatch => ({
   onKeyPress: {
