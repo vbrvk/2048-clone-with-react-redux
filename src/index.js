@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore } from 'redux';
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 
 import reducer from './reducers';
 
@@ -43,10 +43,10 @@ const rootPath = process.env.NODE_ENV === 'production' ? '/2048-clone-with-react
 
 ReactDOM.render( // eslint-disable-next-line
   <Provider store={store}>
-    <Router history={browserHistory}>
+    <Router history={hashHistory}>
       <Route path={rootPath} component={App}>
         <IndexRoute component={Game} />
-        <Route path="saved" component={GameList} />
+        <Route path="/saved" component={GameList} />
       </Route>
     </Router>
   </Provider>,

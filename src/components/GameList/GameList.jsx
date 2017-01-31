@@ -1,5 +1,5 @@
 import React from 'react';
-import { browserHistory } from 'react-router';
+import { hashHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { deleteFromSavedGames, loadGameFromSaved } from '../../actions/gameState';
 import GameListItem from '../GameListItem';
@@ -12,8 +12,8 @@ const GameList = ({ games, loadGame, deleteGame }) => (
       <GameListItem
         game={game}
         size={{
-          height: getSize(game.height, game.blockSize, game.borderWidth),
-          width: getSize(game.width, game.blockSize, game.borderWidth),
+          height: getSize(game.size.height, game.blockSize, game.borderWidth),
+          width: getSize(game.size.width, game.blockSize, game.borderWidth),
         }}
         onLoad={loadGame(index)}
         onDelete={deleteGame(index)}
@@ -24,7 +24,9 @@ const GameList = ({ games, loadGame, deleteGame }) => (
 
 GameList.propTypes = {
   games: React.PropTypes.arrayOf(React.PropTypes.shape({
-    blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
+    blocks: React.PropTypes.shape({
+      active: React.PropTypes.array,
+    }).isRequired,
     score: React.PropTypes.number.isRequired,
     bestScore: React.PropTypes.number.isRequired,
     blockSize: React.PropTypes.number.isRequired,
@@ -39,7 +41,7 @@ export default connect(state => ({
 }), dispatch => ({
   loadGame: index => () => {
     dispatch(loadGameFromSaved(index));
-    browserHistory.push('/');
+    hashHistory.push('#');
   },
   deleteGame: index => () => dispatch(deleteFromSavedGames(index)),
 }))(GameList);

@@ -39,7 +39,9 @@ GameListItem.propTypes = {
   onLoad: React.PropTypes.func.isRequired,
   onDelete: React.PropTypes.func.isRequired,
   game: React.PropTypes.shape({
-    blocks: React.PropTypes.arrayOf(React.PropTypes.array).isRequired,
+    blocks: React.PropTypes.shape({
+      active: React.PropTypes.array,
+    }).isRequired,
     score: React.PropTypes.number.isRequired,
     bestScore: React.PropTypes.number.isRequired,
     blockSize: React.PropTypes.number.isRequired,
