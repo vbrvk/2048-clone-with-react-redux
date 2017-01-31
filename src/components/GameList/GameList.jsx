@@ -1,10 +1,20 @@
 import React from 'react';
 import { hashHistory } from 'react-router';
 import { connect } from 'react-redux';
+import { Toaster, Position } from '@blueprintjs/core';
 import { deleteFromSavedGames, loadGameFromSaved } from '../../actions/gameState';
 import GameListItem from '../GameListItem';
 
 const getSize = (blockCount, blockSize, marginSize) => `${(blockSize * blockCount) + (marginSize * (blockCount - 1))}px`;
+
+const Toast = Toaster.create({
+  position: Position.BOTTOM_RIGHT,
+});
+const showToast = message => Toast.show({
+  className: 'pt-intent-primary',
+  message,
+  timeout: 2500,
+});
 
 const GameList = ({ games, loadGame, deleteGame }) => (
   <div>
@@ -43,5 +53,8 @@ export default connect(state => ({
     dispatch(loadGameFromSaved(index));
     hashHistory.push('#');
   },
-  deleteGame: index => () => dispatch(deleteFromSavedGames(index)),
+  deleteGame: index => () => {
+    dispatch(deleteFromSavedGames(index));
+    showToast('Game was successfuly deleted');
+  },
 }))(GameList);
