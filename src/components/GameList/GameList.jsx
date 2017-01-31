@@ -18,6 +18,18 @@ const showToast = message => Toast.show({
 
 const GameList = ({ games, loadGame, deleteGame }) => (
   <div>
+    {games.length === 0 ?
+      <h1
+        style={{
+          textAlign: 'center',
+          margin: '100px',
+          color: '#182026',
+        }}
+      >
+        You don`t have saved games
+      </h1> :
+      null
+    }
     {games.map((game, index) => (
       <GameListItem
         game={game}

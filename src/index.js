@@ -14,7 +14,7 @@ import './index.css';
 
 const getStoreFromLocalStorage = () => {
   try {
-    return false && JSON.parse(localStorage.getItem('state'));
+    return JSON.parse(localStorage.getItem('state'));
   } catch (e) {
     return false;
   }
@@ -25,7 +25,7 @@ const getReduxDevelopTools = (process.env.NODE_ENV === 'production' ? null : (wi
 const prevState = getStoreFromLocalStorage();
 let store;
 
-if (prevState) {
+if (prevState && prevState.version === process.env.REACT_APP_VERSION) {
   store = getReduxDevelopTools ?
           createStore(reducer, prevState, getReduxDevelopTools) :
           createStore(reducer, prevState);
@@ -39,12 +39,11 @@ window.addEventListener('unload', () => {
   localStorage.setItem('state', JSON.stringify(store.getState()));
 });
 
-const rootPath = process.env.NODE_ENV === 'production' ? '/2048-clone-with-react-redux' : '/';
 
 ReactDOM.render( // eslint-disable-next-line
   <Provider store={store}>
     <Router history={hashHistory}>
-      <Route path={rootPath} component={App}>
+      <Route path="/" component={App}>
         <IndexRoute component={Game} />
         <Route path="/saved" component={GameList} />
       </Route>
