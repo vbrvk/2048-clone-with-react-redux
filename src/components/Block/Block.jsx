@@ -20,7 +20,7 @@ function Block({ value, color, size, position, merged, isNew }) {
       }}
       className={`game-block ${isNew ? 'new-block' : ''} ${merged ? 'merged-block' : ''}`}
     >
-      <span>{value}</span>
+      <span>{value > 512 ? `${Math.floor(value / 1000)}K` : value} </span>
     </div>
   );
 }

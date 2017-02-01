@@ -5,11 +5,15 @@ export const actionTypes = keymirror({
   PRESS_RIGHT_KEY: null,
   PRESS_UP_KEY: null,
   PRESS_DOWN_KEY: null,
+
   NEW_GAME: null,
   CONTINUE_GAME: null,
   SAVE_GAME: null,
+
   DELETE_FROM_SAVED_GAMES: null,
   LOAD_GAME_FROM_SAVED: null,
+
+  REVERT_STEP: null,
 });
 
 export const VECTORS = {

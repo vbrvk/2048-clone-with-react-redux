@@ -14,7 +14,7 @@ import './index.css';
 
 const getStoreFromLocalStorage = () => {
   try {
-    return JSON.parse(localStorage.getItem('state'));
+    return false && JSON.parse(localStorage.getItem('state'));
   } catch (e) {
     return false;
   }

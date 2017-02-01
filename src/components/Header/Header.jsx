@@ -57,6 +57,14 @@ class Header extends React.Component {
         >
           Save game
         </button>
+        <button
+          onClick={this.props.revertStep}
+          type="button"
+          disabled={!this.props.canRevertStep}
+          className="new-game-button pt-button pt-intent-primary pt-icon-undo"
+        >
+          Revert step
+        </button>
         <Alert
           isOpen={this.state.showAlert}
           confirmButtonText="Yes"
@@ -78,5 +86,7 @@ Header.propTypes = {
   savedGamesCount: React.PropTypes.number.isRequired,
   newGame: React.PropTypes.func.isRequired,
   saveGame: React.PropTypes.func.isRequired,
+  canRevertStep: React.PropTypes.bool.isRequired,
+  revertStep: React.PropTypes.func.isRequired,
 };
 export default Header;

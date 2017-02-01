@@ -126,6 +126,8 @@ class Game extends React.Component {
           newGame={this.props.newGame}
           savedGamesCount={this.props.savedGamesCount}
           saveGame={this.saveGame}
+          revertStep={this.props.revertStep}
+          canRevertStep={!!game.history.length}
         />
         <Grid
           width={size.width}
@@ -155,6 +157,7 @@ Game.propTypes = {
   newGame: React.PropTypes.func.isRequired,
   continueGame: React.PropTypes.func.isRequired,
   saveGame: React.PropTypes.func.isRequired,
+  revertStep: React.PropTypes.func.isRequired,
   savedGamesCount: React.PropTypes.number.isRequired,
   bestScore: React.PropTypes.number.isRequired,
   game: React.PropTypes.shape({
@@ -198,5 +201,8 @@ export default connect(state => ({
   },
   saveGame: () => {
     dispatch(actions.saveGame());
+  },
+  revertStep: () => {
+    dispatch(actions.revertStep());
   },
 }))(Game);

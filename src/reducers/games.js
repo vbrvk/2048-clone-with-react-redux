@@ -51,10 +51,20 @@ export default (state = defaultState, action) => {
         currentGame: loadGame(state.saved, action.index),
       };
     case (actionTypes.DELETE_FROM_SAVED_GAMES):
-      console.log(deleteGame(state.saved, action.index));
       return {
         ...state,
         saved: deleteGame(state.saved, action.index),
+      };
+    case (actionTypes.REVERT_STEP): // eslint-disable-line
+      const lastIndexOfHistory = state.currentGame.history.length - 1;
+      return {
+        ...state,
+        currentGame: {
+          ...state.currentGame,
+          score: state.currentGame.history[lastIndexOfHistory].score,
+          blocks: state.currentGame.history[lastIndexOfHistory].blocks,
+          history: [...state.currentGame.history.slice(0, lastIndexOfHistory)],
+        },
       };
     default: return state;
   }

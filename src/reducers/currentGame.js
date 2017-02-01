@@ -1,4 +1,4 @@
-import { eq, random, find, findIndex } from 'lodash';
+import { eq, random, find, findIndex, cloneDeep } from 'lodash';
 import { GAME_STATUS, VECTORS } from '../constants';
 
 /* eslint-disable no-param-reassign */
@@ -129,9 +129,9 @@ const isGameEnd = (blocks) => {
 };
 
 export const getNewBlocksAfterKeyPress = (state, vector) => {
-  let { blocks } = state;
-  const { size } = state;
-  const newState = { ...state };
+  const newState = cloneDeep(state);
+  let { blocks } = newState;
+  const { size } = newState;
   const traversals = buildTraversals(size, vector);
   let currentBlock;
   let positions;
@@ -179,6 +179,9 @@ export const getNewBlocksAfterKeyPress = (state, vector) => {
   });
 
   if (moved) {
+    newState.history = [...newState.history.slice(-2), {
+      blocks: state.blocks, score: state.score,
+    }];
     blocks = getNewBlocksState(blocks);
     if (isGameEnd(blocks)) newState.status = GAME_STATUS.LOSE;
   }
@@ -207,6 +210,7 @@ export const getNewGameState = (width = 4, height = 4) => {
     score: 0,
     isWon: false,
     status: GAME_STATUS.PLAY,
+    history: [],
   };
 
   state.blocks.empty = getEmptyBlocks(state.size);

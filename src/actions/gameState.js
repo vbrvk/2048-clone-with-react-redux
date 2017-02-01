@@ -22,5 +22,15 @@ export const loadGameFromSaved = index => ({
   index,
 });
 
+export const revertStep = () => ({
+  type: actionTypes.REVERT_STEP,
+});
 
-export default { newGame, continueGame, saveGame, deleteFromSavedGames, loadGameFromSaved };
+export default {
+  newGame,
+  continueGame,
+  saveGame,
+  deleteFromSavedGames,
+  loadGameFromSaved,
+  revertStep,
+};
