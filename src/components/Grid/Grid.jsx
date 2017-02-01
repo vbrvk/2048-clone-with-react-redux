@@ -2,7 +2,7 @@ import React from 'react';
 import './Grid.css';
 import Block from '../Block/';
 
-const defaultColorScheme = {
+const colorScheme = {
   backgroundColor: '#ccc',
   2: '#f44336',
   4: '#E91E63',
@@ -23,7 +23,7 @@ const defaultColorScheme = {
 
 const getSize = (size, blockSize, borderWidth) => `${(blockSize * size) + (borderWidth * (size - 1))}px`;
 
-const Grid = ({ game, colorScheme }) => {
+const Grid = ({ game }) => {
   const emptyBlocks = [];
   for (let y = 0; y < game.size.height; ++y) { // eslint-disable-line
     for (let x = 0; x < game.size.width; ++x) { // eslint-disable-line
@@ -91,26 +91,6 @@ Grid.propTypes = {
     }),
   }).isRequired,
 
-  colorScheme: React.PropTypes.shape({
-    backgroundColor: React.PropTypes.string,
-    2: React.PropTypes.string,
-    4: React.PropTypes.string,
-    8: React.PropTypes.string,
-    16: React.PropTypes.string,
-    32: React.PropTypes.string,
-    64: React.PropTypes.string,
-    128: React.PropTypes.string,
-    256: React.PropTypes.string,
-    512: React.PropTypes.string,
-    1024: React.PropTypes.string,
-    2048: React.PropTypes.string,
-    4096: React.PropTypes.string,
-    8192: React.PropTypes.string,
-    16384: React.PropTypes.string,
-  }),
 };
 
-Grid.defaultProps = {
-  colorScheme: defaultColorScheme,
-};
 export default Grid;
