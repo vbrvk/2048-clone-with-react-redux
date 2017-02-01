@@ -1,10 +1,7 @@
 import keymirror from 'key-mirror';
 
 export const actionTypes = keymirror({
-  PRESS_LEFT_KEY: null,
-  PRESS_RIGHT_KEY: null,
-  PRESS_UP_KEY: null,
-  PRESS_DOWN_KEY: null,
+  PRESS_KEY: null,
 
   NEW_GAME: null,
   CONTINUE_GAME: null,
@@ -32,11 +29,10 @@ export const VECTORS = {
 };
 
 export const KEY_CODES = {
-  UP: 38,
-  DOWN: 40,
-  LEFT: 37,
-  RIGHT: 39,
-  ALL_CODES: [37, 38, 39, 40],
+  38: 'UP',
+  40: 'DOWN',
+  37: 'LEFT',
+  39: 'RIGHT',
 };
 
 export const GAME_STATUS = keymirror({

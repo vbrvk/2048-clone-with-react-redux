@@ -14,10 +14,7 @@ const defaultState = {
 export default (state = defaultState, action) => {
   let currentGame;
   switch (action.type) {
-    case (actionTypes.PRESS_DOWN_KEY):
-    case (actionTypes.PRESS_UP_KEY):
-    case (actionTypes.PRESS_RIGHT_KEY):
-    case (actionTypes.PRESS_LEFT_KEY):
+    case (actionTypes.PRESS_KEY):
       currentGame = (getNewBlocksAfterKeyPress(state.currentGame, action.vector));
       return {
         ...state,

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Alert, Position, Toaster } from '@blueprintjs/core';
 import '@blueprintjs/core/dist/blueprint.css';
 
-import { KEY_CODES, GAME_STATUS } from '../../constants';
+import { KEY_CODES, GAME_STATUS, VECTORS } from '../../constants';
 
 import { getNameOfScoreField } from '../../reducers/bestScores'; // TODO fix dependend from reducer
 
@@ -86,17 +86,9 @@ class Game extends React.Component {
   }
 
   handleKeyPress(e) {
-    if (KEY_CODES.ALL_CODES.includes(e.keyCode)) e.preventDefault();
-    switch (e.keyCode) {
-      case (KEY_CODES.UP): this.props.onKeyPress.Up();
-        break;
-      case (KEY_CODES.DOWN): this.props.onKeyPress.Down();
-        break;
-      case (KEY_CODES.LEFT): this.props.onKeyPress.Left();
-        break;
-      case (KEY_CODES.RIGHT): this.props.onKeyPress.Right();
-        break;
-      default: break;
+    if (KEY_CODES[e.keyCode]) {
+      this.props.onKeyPress(VECTORS[KEY_CODES[e.keyCode]]);
+      e.preventDefault();
     }
   }
   render() {
@@ -148,12 +140,7 @@ class Game extends React.Component {
 }
 
 Game.propTypes = {
-  onKeyPress: React.PropTypes.shape({
-    Up: React.PropTypes.func,
-    Down: React.PropTypes.func,
-    Left: React.PropTypes.func,
-    Right: React.PropTypes.func,
-  }).isRequired,
+  onKeyPress: React.PropTypes.func.isRequired,
   newGame: React.PropTypes.func.isRequired,
   continueGame: React.PropTypes.func.isRequired,
   saveGame: React.PropTypes.func.isRequired,
@@ -179,19 +166,8 @@ export default connect(state => ({
   bestScore: state.games.bestScores[getNameOfScoreField(state.games.currentGame.size)] || 0,
   savedGamesCount: state.games.saved.length,
 }), dispatch => ({
-  onKeyPress: {
-    Up: () => {
-      dispatch(actions.pressUpKey());
-    },
-    Down: () => {
-      dispatch(actions.pressDownKey());
-    },
-    Left: () => {
-      dispatch(actions.pressLeftKey());
-    },
-    Right: () => {
-      dispatch(actions.pressRightKey());
-    },
+  onKeyPress: (vector) => {
+    dispatch(actions.pressKey(vector));
   },
   newGame: () => {
     dispatch(actions.newGame());
