@@ -43,9 +43,10 @@ GameListItem.propTypes = {
       active: React.PropTypes.array,
     }).isRequired,
     score: React.PropTypes.number.isRequired,
-    bestScore: React.PropTypes.number.isRequired,
-    blockSize: React.PropTypes.number.isRequired,
-    borderWidth: React.PropTypes.number.isRequired,
+    size: React.PropTypes.shape({
+      blockSize: React.PropTypes.number.isRequired,
+      borderWidth: React.PropTypes.number.isRequired,
+    }),
   }).isRequired,
 };
 

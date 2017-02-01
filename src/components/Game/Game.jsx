@@ -1,9 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { Alert, Position, Toaster } from '@blueprintjs/core';
+import { Alert } from '@blueprintjs/core';
 import '@blueprintjs/core/dist/blueprint.css';
 
 import { KEY_CODES, GAME_STATUS, VECTORS } from '../../constants';
+import showToast from '../Toast';
 
 import { getNameOfScoreField } from '../../reducers/bestScores'; // TODO fix dependend from reducer
 
@@ -11,19 +12,11 @@ import actions from '../../actions';
 import Grid from '../Grid';
 import Header from '../Header';
 
-const Toast = Toaster.create({
-  position: Position.BOTTOM_RIGHT,
-});
-const showToast = message => Toast.show({
-  className: 'pt-intent-primary',
-  message,
-  timeout: 2500,
-});
 class Game extends React.Component {
   constructor() {
     super();
     this.handleKeyPress = this.handleKeyPress.bind(this);
-    this.getSize = this.getSize.bind(this);
+    this.getHeaderWidth = this.getHeaderWidth.bind(this);
     this.saveGame = this.saveGame.bind(this);
   }
 
@@ -38,8 +31,9 @@ class Game extends React.Component {
     document.removeEventListener('touchend', this.touchendHandle);
   }
 
-  getSize(size) {
-    return `${(this.props.game.blockSize * this.props.game.size[size]) + (this.props.game.borderWidth * (this.props.game.size[size] - 1))}px`;
+  getHeaderWidth() {
+    return `${(this.props.game.size.blockSize * this.props.game.size.width) +
+           (this.props.game.size.borderWidth * (this.props.game.size.width + 1))}px`;
   }
 
 
@@ -93,10 +87,6 @@ class Game extends React.Component {
   }
   render() {
     const { game } = this.props;
-    const size = {
-      width: this.getSize('width'),
-      height: this.getSize('height'),
-    };
     let alertText;
     let alertButtonText;
     switch (game.status) { // eslint-disable-line
@@ -112,7 +102,7 @@ class Game extends React.Component {
     return (
       <div>
         <Header
-          width={`${parseInt(size.width, 10) + (2 * game.borderWidth)}px`}
+          width={this.getHeaderWidth()}
           score={game.score}
           bestScore={this.props.bestScore}
           newGame={this.props.newGame}
@@ -122,8 +112,6 @@ class Game extends React.Component {
           canRevertStep={!!game.history.length}
         />
         <Grid
-          width={size.width}
-          height={size.height}
           game={this.props.game}
         />
         <Alert
@@ -154,10 +142,10 @@ Game.propTypes = {
     size: React.PropTypes.shape({
       width: React.PropTypes.number,
       height: React.PropTypes.number,
+      blockSize: React.PropTypes.number.isRequired,
+      borderWidth: React.PropTypes.number.isRequired,
     }).isRequired,
     score: React.PropTypes.number.isRequired,
-    blockSize: React.PropTypes.number.isRequired,
-    borderWidth: React.PropTypes.number.isRequired,
   }).isRequired,
 };
 

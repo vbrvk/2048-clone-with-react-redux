@@ -20,7 +20,10 @@ const defaultColorScheme = {
   16384: '#4CAF50',
 };
 
-const Grid = ({ game, colorScheme, width, height }) => {
+
+const getSize = (size, blockSize, borderWidth) => `${(blockSize * size) + (borderWidth * (size - 1))}px`;
+
+const Grid = ({ game, colorScheme }) => {
   const emptyBlocks = [];
   for (let y = 0; y < game.size.height; ++y) { // eslint-disable-line
     for (let x = 0; x < game.size.width; ++x) { // eslint-disable-line
@@ -29,10 +32,10 @@ const Grid = ({ game, colorScheme, width, height }) => {
           className="Game-empty-block"
           key={`empty-${x}-${y}`}
           style={{
-            top: (y * (game.blockSize + game.borderWidth)) + game.borderWidth,
-            left: (x * (game.blockSize + game.borderWidth)) + game.borderWidth,
-            width: game.blockSize,
-            height: game.blockSize,
+            top: (y * (game.size.blockSize + game.size.borderWidth)) + game.size.borderWidth,
+            left: (x * (game.size.blockSize + game.size.borderWidth)) + game.size.borderWidth,
+            width: game.size.blockSize,
+            height: game.size.blockSize,
             backgroundColor: '#737373',
             position: 'absolute',
             borderRadius: '3px',
@@ -46,10 +49,10 @@ const Grid = ({ game, colorScheme, width, height }) => {
   return (
     <div
       style={{
-        padding: `${game.borderWidth}px`,
+        padding: `${game.size.borderWidth}px`,
         backgroundColor: colorScheme.backgroundColor,
-        width,
-        height,
+        width: getSize(game.size.width, game.size.blockSize, game.size.borderWidth),
+        height: getSize(game.size.height, game.size.blockSize, game.size.borderWidth),
       }}
       className="Grid"
     >
@@ -60,8 +63,8 @@ const Grid = ({ game, colorScheme, width, height }) => {
             <Block
               key={block.id}
               size={{
-                block: game.blockSize,
-                margin: game.borderWidth,
+                block: game.size.blockSize,
+                margin: game.size.borderWidth,
               }}
               isNew={block.new}
               color={colorScheme[block.value]}
@@ -79,15 +82,15 @@ Grid.propTypes = {
   game: React.PropTypes.shape({
     blocks: React.PropTypes.shape({
       active: React.PropTypes.array,
-    }).isRequired,
-    score: React.PropTypes.number.isRequired,
+    }),
     size: React.PropTypes.shape({
       width: React.PropTypes.number,
       height: React.PropTypes.number,
-    }).isRequired,
+      blockSize: React.PropTypes.number,
+      borderWidth: React.PropTypes.number,
+    }),
   }).isRequired,
-  width: React.PropTypes.string.isRequired,
-  height: React.PropTypes.string.isRequired,
+
   colorScheme: React.PropTypes.shape({
     backgroundColor: React.PropTypes.string,
     2: React.PropTypes.string,

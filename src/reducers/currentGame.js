@@ -194,19 +194,14 @@ export const getNewBlocksAfterKeyPress = (state, vector) => {
   };
 };
 
-export const getNewGameState = (width = 4, height = 4) => {
+export const getNewGameState = (settings) => {
   const state = {
-    size: {
-      width,
-      height,
-    },
-    blockSize: 100,
+    size: { ...settings },
     blocks: {
       active: [],
       empty: [],
       nextId: 0,
     },
-    borderWidth: 10,
     score: 0,
     isWon: false,
     status: GAME_STATUS.PLAY,

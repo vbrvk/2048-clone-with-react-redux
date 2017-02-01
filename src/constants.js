@@ -11,6 +11,8 @@ export const actionTypes = keymirror({
   LOAD_GAME_FROM_SAVED: null,
 
   REVERT_STEP: null,
+
+  CHANGE_SETTINGS: null,
 });
 
 export const VECTORS = {

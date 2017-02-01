@@ -26,6 +26,11 @@ export const revertStep = () => ({
   type: actionTypes.REVERT_STEP,
 });
 
+export const changeSettings = settings => ({
+  type: actionTypes.CHANGE_SETTINGS,
+  settings,
+});
+
 export default {
   newGame,
   continueGame,
@@ -33,4 +38,5 @@ export default {
   deleteFromSavedGames,
   loadGameFromSaved,
   revertStep,
+  changeSettings,
 };

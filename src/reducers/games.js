@@ -3,11 +3,18 @@ import { saveGame, deleteGame, loadGame } from './savedGames';
 import { actionTypes, GAME_STATUS } from '../constants';
 import getBestScores from './bestScores';
 
+const defaultSetting = {
+  width: 4,
+  height: 4,
+  blockSize: 100,
+  borderWidth: 10,
+};
 
 const defaultState = {
-  currentGame: getNewGameState(),
+  currentGame: getNewGameState(defaultSetting),
   saved: [],
   bestScores: {},
+  settings: defaultSetting,
 };
 
 
@@ -25,7 +32,7 @@ export default (state = defaultState, action) => {
       return {
         ...state,
         currentGame: {
-          ...getNewGameState(),
+          ...getNewGameState(state.settings),
           bestScore: state.currentGame.bestScore,
         },
       };
@@ -62,6 +69,11 @@ export default (state = defaultState, action) => {
           blocks: state.currentGame.history[lastIndexOfHistory].blocks,
           history: [...state.currentGame.history.slice(0, lastIndexOfHistory)],
         },
+      };
+    case (actionTypes.CHANGE_SETTINGS):
+      return {
+        ...state,
+        settings: action.settings,
       };
     default: return state;
   }

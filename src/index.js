@@ -9,6 +9,7 @@ import reducer from './reducers';
 import App from './components/App';
 import Game from './components/Game/';
 import GameList from './components/GameList/';
+import Settings from './components/Settings/';
 
 import './index.css';
 
@@ -46,6 +47,7 @@ ReactDOM.render( // eslint-disable-next-line
       <Route path="/" component={App}>
         <IndexRoute component={Game} />
         <Route path="/saved" component={GameList} />
+        <Route path="/settings" component={Settings} />
       </Route>
     </Router>
   </Provider>,

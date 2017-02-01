@@ -8,11 +8,14 @@ const Menu = () => (
         <div className="pt-navbar-heading" style={{ fontSize: '30px' }}>2048</div>
       </div>
       <div className="pt-navbar-group pt-align-right">
-        <Link href="#">
-          <button className="pt-button pt-minimal pt-icon-layout-grid">Game</button>
+        <Link href="#" className="pt-button pt-minimal pt-icon-layout-grid">
+          Game
         </Link>
-        <Link href="#saved">
-          <button className="pt-button pt-minimal pt-icon-list">Saved games</button>
+        <Link href="#saved" className="pt-button pt-minimal pt-icon-list">
+          Saved games
+        </Link>
+        <Link href="#settings" className="pt-button pt-minimal pt-icon-settings">
+          Settings
         </Link>
       </div>
     </div>
